@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Box } from './Box/Box';
 import { Searchbar } from './Searchbar/Searchbar';

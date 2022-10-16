@@ -5,7 +5,7 @@ export const ImageGalleryItem = ({ data, onClick }) => {
   return data.map(image => {
     return (
       <li
-        key={image.id}
+        key={image.webformatURL}
         className="ImageGalleryItem"
         onClick={() => onClick(image.largeImageURL)}
       >
