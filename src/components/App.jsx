@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 import { Box } from './Box/Box';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
@@ -19,28 +18,6 @@ export function App() {
   const [status, setStatus] = useState('idle');
   const [showModal, setShowModal] = useState(false);
   const isFirstRender = useRef(true);
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    setPage(1);
-    setQuery(e.target.elements.query.value);
-    setImages([]);
-    setTotalResults(0);
-    e.target.reset();
-  };
-
-  const loadMore = () => {
-    setPage(page + 1);
-  };
-
-  const handleImageClick = url => {
-    toggleModal();
-    selectedImage = url;
-  };
-
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -72,14 +49,34 @@ export function App() {
     }
   }, [page, query]);
 
+  const handleSubmit = e => {
+    e.preventDefault();
+    setPage(1);
+    setQuery(e.target.elements.query.value);
+    setImages([]);
+    setTotalResults(0);
+    e.target.reset();
+  };
+
+  const loadMore = () => {
+    setPage(page + 1);
+  };
+
+  const handleImageClick = url => {
+    toggleModal();
+    selectedImage = url;
+  };
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
   return (
     <Box className="App">
       <Searchbar onSubmit={handleSubmit}></Searchbar>
       {status === 'pending' && (
         <>
-          <ImageGallery>
-            <ImageGalleryItem data={images}></ImageGalleryItem>
-          </ImageGallery>
+          <ImageGallery data={images} onClick={handleImageClick}></ImageGallery>
           <Loader />
         </>
       )}
@@ -89,12 +86,7 @@ export function App() {
           {showModal && (
             <Modal url={selectedImage} onClose={toggleModal}></Modal>
           )}
-          <ImageGallery>
-            <ImageGalleryItem
-              onClick={handleImageClick}
-              data={images}
-            ></ImageGalleryItem>
-          </ImageGallery>
+          <ImageGallery data={images} onClick={handleImageClick}></ImageGallery>
           {images.length < totalResults && (
             <Button onClick={loadMore} page={page}></Button>
           )}
